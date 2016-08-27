@@ -71,8 +71,10 @@ class HubspotWrapper:
         array_to_send = HubspotWrapper.convert_contact_properties_to_array_to_send(contact_properties)
         result = self.fire_post_request(url, array_to_send)
         if result.status_code != 204:
-            logging.error(result.content)
-            raise Exception
+            message = result.json()
+            logging.error(message)
+            if(message['error'] != 'CONTACT_EXISTS'):
+                raise Exception
 
     def get_contact(self, contact_id):
         url = self.base_url + 'contacts/v1/contact/vid/{0}/profile'.format(contact_id)
