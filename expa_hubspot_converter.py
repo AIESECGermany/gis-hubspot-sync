@@ -13,12 +13,19 @@ class EXPAHubspotConverter:
 
     @staticmethod
     def should_deal_be_in_reception_pipeline(opportunity):
-        unmatched_status = ['unmatched', 'in progress']
+        unmatched_status = ['unmatched', 'in progress', 'draft']
         return opportunity['current_status'] not in unmatched_status
 
     @staticmethod
     def convert_expa_birthdate_to_hubspot_timestamp(expa_birthdate):
         parsed_date = datetime.strptime(expa_birthdate, '%Y-%m-%d')
+        timestamp = calendar.timegm(parsed_date.timetuple())
+        return timestamp * 1000
+
+    @staticmethod
+    def convert_expa_matched_date_to_hubspot_timestamp(expa_matched_date):
+        parsed_date = dateutil.parser.parse(expa_matched_date)
+        parsed_date = parsed_date.replace(hour=0, minute=0, second=0, microsecond=0)
         timestamp = calendar.timegm(parsed_date.timetuple())
         return timestamp * 1000
 
@@ -42,8 +49,9 @@ class EXPAHubspotConverter:
         if EXPAHubspotConverter.is_value_set(opportunity, 'current_status'):
             properties['expa_status'] = opportunity['current_status']
         # look for first matched for now and take the date
-        if EXPAHubspotConverter.is_value_set(opportunity['matched_applications'][0]['meta'], 'date_matched'):
-            properties['matched_date'] = EXPAHubspotConverter.convert_expa_date_to_hubspot_timestamp(
+        if (EXPAHubspotConverter.is_value_set(opportunity, 'matched_applications')
+            and EXPAHubspotConverter.is_value_set(opportunity['matched_applications'][0]['meta'], 'date_matched')):
+            properties['matched_date'] = EXPAHubspotConverter.convert_expa_matched_date_to_hubspot_timestamp(
                 opportunity['matched_applications'][0]['meta']['date_matched'])
         if set_in_reception_pipeline:
             reception_pipeline_id = '5467c9aa-d815-4855-90dd-725f4702a7f1'

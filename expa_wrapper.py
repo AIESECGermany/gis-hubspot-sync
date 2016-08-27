@@ -74,11 +74,12 @@ class EXPAWrapper:
             current_page = self.fire_get_request(url + '&page=%d' % c)
             for i in current_page['data']:
                 opportunity = self.get_opportunity_detail(i['id'])
-                opportunity['matched_applications'] = []
                 matched_applications = self.get_opportunity_matched_applications(i['id']);
                 for a in matched_applications['data']:
+                    if 'matched_applications' not in opportunity:
+                        opportunity['matched_applications'] = []
                     application = self.get_application_detail(a['id'])
-                    opportunity['matched_applications'].append()
+                    opportunity['matched_applications'].append(application)
                 result.append(opportunity)
         return result
 
