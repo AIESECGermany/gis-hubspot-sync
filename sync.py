@@ -25,6 +25,8 @@ class StreamToLogger(object):
 
 def get_hubspot_id(opportunity):
     description = opportunity['description']
+    if description is None:
+        return None
     regex_match = re.search('(?<=HID: )\d+$', description)
     if regex_match is None:
         return None

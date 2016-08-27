@@ -10,6 +10,7 @@ class EXPAWrapper:
         self.access_token = ''
         self.base_url = 'https://gis-api.aiesec.org:443/v2/'
         self.opportunity_url = self.base_url + 'opportunities/'
+        self.application_url = self.base_url + 'applications/'
 
     @staticmethod
     def format_date_time(date_time):
@@ -73,11 +74,25 @@ class EXPAWrapper:
             current_page = self.fire_get_request(url + '&page=%d' % c)
             for i in current_page['data']:
                 opportunity = self.get_opportunity_detail(i['id'])
+                opportunity['matched_applications'] = []
+                matched_applications = self.get_opportunity_matched_applications(i['id']);
+                for a in matched_applications['data']:
+                    application = self.get_application_detail(a['id'])
+                    opportunity['matched_applications'].append()
                 result.append(opportunity)
         return result
 
     def get_opportunity_detail(self, opportunity_id):
         url = self.opportunity_url + str(opportunity_id) + '.json?access_token={0}'
+        return self.fire_get_request(url)
+
+    def get_opportunity_matched_applications(self, opportunity_id):
+        url = self.opportunity_url + str(opportunity_id) + '/applications.json?access_token={0}'
+        url += '&filters%5Bstatuses%5D%5B%5D=matched&filters%5Bstatuses%5D%5B%5D=accepted&filters%5Bstatuses%5D%5B%5D=approved'
+        return self.fire_get_request(url)
+
+    def get_application_detail(self, application_id):
+        url = self.application_url + str(application_id) + '.json?access_token={0}'
         return self.fire_get_request(url)
 
     def get_person(self, person_id):

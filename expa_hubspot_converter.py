@@ -41,6 +41,10 @@ class EXPAHubspotConverter:
             properties['duration'] = opportunity['duration_min']
         if EXPAHubspotConverter.is_value_set(opportunity, 'current_status'):
             properties['expa_status'] = opportunity['current_status']
+        # look for first matched for now and take the date
+        if EXPAHubspotConverter.is_value_set(opportunity['matched_applications'][0]['meta'], 'date_matched'):
+            properties['matched_date'] = EXPAHubspotConverter.convert_expa_date_to_hubspot_timestamp(
+                opportunity['matched_applications'][0]['meta']['date_matched'])
         if set_in_reception_pipeline:
             reception_pipeline_id = '5467c9aa-d815-4855-90dd-725f4702a7f1'
             properties['pipeline'] = reception_pipeline_id
