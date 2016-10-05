@@ -53,6 +53,7 @@ def synchronize_deals(expa, hubspot, date_to_sync):
 
 def synchronize_contacts(expa, hubspot):
     contacts = hubspot.get_contacts()
+    logging.debug('Sync {0} Contacts'.format(len(contacts)))
     for hubspot_id, expa_id in contacts.iteritems():
         person = expa.get_person(expa_id)
         hubspot_properties = EXPAHubspotConverter.convert_person_to_hubspot_properties(person)
