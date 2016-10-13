@@ -29,7 +29,7 @@ class EXPAWrapper:
             logging.debug("expa get request")
             result = requests.get(url.format(self.access_token), verify=False)
             if result.status_code != 200:
-                log_request_error(result)
+                self.log_request_error(result)
             if result.status_code == 401:
                 self.access_token = self.token_generator.generate_token()
             if result.status_code == 200:
@@ -47,7 +47,7 @@ class EXPAWrapper:
             result = requests.post(url.format(self.access_token), data=payload, headers=headers,
                                    verify=False)
             if result.status_code != 200:
-                log_request_error(result)
+                self.log_request_error(result)
             if result.status_code == 403:
                 self.access_token = self.token_generator.generate_token()
             break
