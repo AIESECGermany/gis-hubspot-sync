@@ -4,6 +4,7 @@ from credentials_store import credentials
 import logging
 import sys
 import re
+import os
 from expa_hubspot_converter import EXPAHubspotConverter
 from hubspot_wrapper import HubspotWrapper
 
