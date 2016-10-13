@@ -61,7 +61,7 @@ def synchronize_contacts(expa, hubspot):
 
 
 def main():
-    logging.basicConfig(filename='sync.log'.format(str(datetime.datetime.today().date())),
+    logging.basicConfig(filename='{0}_sync.log'.format(str(datetime.datetime.today().date())),
                         level=logging.DEBUG,
                         format='%(asctime)s %(levelname)-8s %(message)s')
     stdout_logger = logging.getLogger('')
@@ -71,6 +71,13 @@ def main():
     sl = StreamToLogger(stderr_logger, logging.ERROR)
     sys.stderr = sl
     logging.info("Generating an EXPA access token...")
+
+    #remove old log files
+    try:
+        os.remove( '{0}_sync.log'.format(str( (datetime.datetime.today() - datetime.timedelta(30)).date())) )
+    except OSError:
+        logging.info("no logfile removed")
+    
     try:
         expa = expa_wrapper.EXPAWrapper(credentials["expa"]["user"], credentials["expa"]["password"])
         hubspot = HubspotWrapper(credentials['hubspot']['api_key'])
