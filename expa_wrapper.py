@@ -16,13 +16,20 @@ class EXPAWrapper:
     def format_date_time(date_time):
         return date_time.strftime('%Y-%m-%dT%H:%M:%SZ')
 
+    def log_request_error(result):
+        try: 
+            logging.error('Error: {0}'.format(result.json()))
+        except Exception:
+            logging.error('Error: {0}'.format(result))
+
     def fire_get_request(self, url):
         if self.access_token == '':
             self.access_token = self.token_generator.generate_token()
         while True:
+            logging.debug("expa get request")
             result = requests.get(url.format(self.access_token), verify=False)
             if result.status_code != 200:
-                logging.error('Error: {0}'.format(result.json()))
+                log_request_error(result)
             if result.status_code == 401:
                 self.access_token = self.token_generator.generate_token()
             if result.status_code == 200:
@@ -36,10 +43,11 @@ class EXPAWrapper:
         headers = {'content-type': 'application/json'}
         url += '?access_token={0}'
         while True:
+            logging.debug("expa post request")
             result = requests.post(url.format(self.access_token), data=payload, headers=headers,
                                    verify=False)
             if result.status_code != 200:
-                logging.error('Error: {0}'.format(result.json()))
+                log_request_error(result)
             if result.status_code == 403:
                 self.access_token = self.token_generator.generate_token()
             break
