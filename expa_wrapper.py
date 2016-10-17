@@ -16,6 +16,7 @@ class EXPAWrapper:
     def format_date_time(date_time):
         return date_time.strftime('%Y-%m-%dT%H:%M:%SZ')
 
+    @staticmethod
     def log_request_error(result):
         try: 
             logging.error('Error: {0}'.format(result.json()))
