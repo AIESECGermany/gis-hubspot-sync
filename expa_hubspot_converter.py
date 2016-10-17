@@ -73,4 +73,6 @@ class EXPAHubspotConverter:
             properties['gender'] = person['gender'].title()
         if EXPAHubspotConverter.is_value_set(person['contact_info'], 'phone'):
             properties['telephone'] = person['contact_info']['phone']
+        if EXPAHubspotConverter.is_value_set(person['managers'][0], 'email'):
+            properties['ep_manager_email'] = person['managers'][0]['email']
         return properties
