@@ -2,7 +2,7 @@ import requests
 import logging
 import gis_token_generator
 import json
-
+import time
 
 class EXPAWrapper:
     def __init__(self, email, password):
@@ -35,6 +35,7 @@ class EXPAWrapper:
                 self.access_token = self.token_generator.generate_token()
             if result.status_code == 200:
                 break
+            time.sleep(2)
         return result.json()
 
     def fire_post_request(self, url, body):
@@ -51,7 +52,9 @@ class EXPAWrapper:
                 self.log_request_error(result)
             if result.status_code == 403:
                 self.access_token = self.token_generator.generate_token()
-            break
+            if result.status_code == 200:
+                break
+            time.sleep(2)
         return result
 
     def get_page_number(self, last_interaction=None):
