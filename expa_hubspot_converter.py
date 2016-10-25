@@ -41,6 +41,8 @@ class EXPAHubspotConverter:
                       'expa_url': 'https://experience.aiesec.org/#/opportunities/{0}'.format(opportunity['id']),
                       'internship_type': 'i{0}'.format(opportunity['programmes']['short_name']),
                       'lc': opportunity['home_lc']['name'].title(), 'opportunity_name': opportunity['title']}
+        if properties['lc'] == 'Berlin Tu':
+            properties['lc'] == 'Berlin TU':
         if EXPAHubspotConverter.is_value_set(opportunity, 'applications_close_date'):
             properties['application_close_date'] = EXPAHubspotConverter.convert_expa_date_to_hubspot_timestamp(
                 opportunity['applications_close_date'])
