@@ -72,7 +72,6 @@ class HubspotWrapper:
         if result.status_code != 204:
             message = result.json()
             logging.error(message)
-            if(message['error'] != 'CONTACT_EXISTS'):
 
     def get_contact(self, contact_id):
         url = self.base_url + 'contacts/v1/contact/vid/{0}/profile'.format(contact_id)
