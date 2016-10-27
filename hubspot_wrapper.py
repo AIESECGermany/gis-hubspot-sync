@@ -64,7 +64,6 @@ class HubspotWrapper:
         result = self.fire_put_request(url, array_to_send)
         if result.status_code != 200:
             logging.error(result.content)
-            raise Exception
 
     def update_contact(self, contact_id, contact_properties):
         url = self.base_url + 'contacts/v1/contact/vid/{0}/profile'.format(contact_id)
@@ -74,7 +73,6 @@ class HubspotWrapper:
             message = result.json()
             logging.error(message)
             if(message['error'] != 'CONTACT_EXISTS'):
-                raise Exception
 
     def get_contact(self, contact_id):
         url = self.base_url + 'contacts/v1/contact/vid/{0}/profile'.format(contact_id)
