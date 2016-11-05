@@ -13,7 +13,7 @@ class EXPAHubspotConverter:
 
     @staticmethod
     def should_deal_be_in_reception_pipeline(opportunity):
-        unmatched_status = ['unmatched', 'in progress', 'draft']
+        unmatched_status = ['open', 'unmatched', 'in progress', 'draft']
         return opportunity['current_status'] not in unmatched_status
 
     @staticmethod
